@@ -35,7 +35,7 @@ class AuthorDetail(generics.RetrieveUpdateDestroyAPIView):
             except ValueError:
                 raise NotFound('Invalid prize value')
             # filter the queryset to authors with no_of_prizes greater than the given value
-            queryset = Author.objects.filter(no_of_prizes__gt=prize_value)
+            git initqueryset = Author.objects.filter(no_of_prizes__gt=prize_value)
         else:
             queryset = self.queryset
         return queryset
