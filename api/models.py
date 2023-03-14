@@ -31,5 +31,26 @@ class Book(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return "Title: " + self.title + "\nAuthor: " + self.author.__str__() + "\nPublisher: " + self.publisher.__str__() + \
-            "\nPublished date: " + self.published_date.__str__() + "\nDescription: " + self.description.__str__()
+        return self.title
+
+
+class User(models.Model):
+    username = models.CharField(max_length=30, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    birthday = models.DateTimeField()
+
+    def __str__(self):
+        return self.username
+
+
+class Review(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #date = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField()
+    review = models.TextField()
+
+    class Meta:
+        unique_together = ('book', 'user')
