@@ -1,7 +1,11 @@
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Book, Author, Publisher, User, Review
+from .reports import report
 from .serializers import BookSerializer, AuthorSerializer, PublisherSerializer, AuthorsKeySerializer, \
-    BooksKeySerializer, UserSerializer, ReviewSerializer
+    BooksKeySerializer, UserSerializer, ReviewSerializer, ReportEntrySerializer
 from rest_framework.exceptions import NotFound
 
 
@@ -67,3 +71,10 @@ class ReviewList(generics.ListCreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+
+class ReviewReportAPIView(APIView):
+    def get(self, request):
+        data = report()
+        serializer = ReportEntrySerializer(instance=data, many=True)
+        return Response(data=serializer.data)

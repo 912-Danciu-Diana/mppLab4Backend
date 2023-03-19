@@ -53,3 +53,6 @@ class BooksKeySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ReportEntrySerializer(serializers.Serializer):
+    user = UserSerializer()
+    count = serializers.IntegerField()
