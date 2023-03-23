@@ -56,3 +56,8 @@ class BooksKeySerializer(serializers.ModelSerializer):
 class ReportEntrySerializer(serializers.Serializer):
     user = UserSerializer()
     count = serializers.IntegerField()
+
+
+class OrderedReportEntrySerializer(serializers.Serializer):
+    user = UserSerializer()
+    count = serializers.IntegerField()

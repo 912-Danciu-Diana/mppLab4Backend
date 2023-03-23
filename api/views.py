@@ -1,11 +1,12 @@
 from rest_framework import generics
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Book, Author, Publisher, User, Review
-from .reports import report
+from .reports import report, ordered_report
 from .serializers import BookSerializer, AuthorSerializer, PublisherSerializer, AuthorsKeySerializer, \
-    BooksKeySerializer, UserSerializer, ReviewSerializer, ReportEntrySerializer
+    BooksKeySerializer, UserSerializer, ReviewSerializer, ReportEntrySerializer, OrderedReportEntrySerializer
 from rest_framework.exceptions import NotFound
 
 
@@ -77,4 +78,11 @@ class ReviewReportAPIView(APIView):
     def get(self, request):
         data = report()
         serializer = ReportEntrySerializer(instance=data, many=True)
+        return Response(data=serializer.data)
+
+
+class ReviewOrderedReportAPIView(APIView):
+    def get(self, request):
+        data = ordered_report()
+        serializer = OrderedReportEntrySerializer(instance=data, many=True)
         return Response(data=serializer.data)
