@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -86,3 +86,48 @@ class ReviewOrderedReportAPIView(APIView):
         data = ordered_report()
         serializer = OrderedReportEntrySerializer(instance=data, many=True)
         return Response(data=serializer.data)
+
+
+class BookUserAPIView(APIView):
+    def post(self, request, id):
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            raise NotFound('Book not found')
+        data = request.data
+        newreviews = []
+        for item in data:
+            user_id = item.get('user')
+            rating = item.get('rating')
+            review = item.get('review')
+            newreview = Review.objects.create(
+                book=BookSerializer.objects.get(id=id),
+                user_id=UserSerializer.objects.get(id=user_id),
+                rating=rating,
+                review=review
+            )
+            newreview.save()
+            newreviews.append(newreview)
+        serializers = ReviewSerializer(newreviews, many=True)
+        return Response(serializers.data)
+        # try:
+        #     user = User.objects.get(id=user_id)
+        # except User.DoesNotExist:
+        #     raise NotFound('User not found')
+        #
+        # # retrieve rating and review data from request data
+        # rating = request.data.get('rating')
+        # review_text = request.data.get('review')
+        #
+        # # create a new review object and set its book and user attributes
+        # review = Review.objects.create(book=book, user=user)
+        #
+        # # return an error if the review creation failed
+        # if not review:
+        #     return Response({'error': 'Failed to create review'}, status=status.HTTP_400_BAD_REQUEST)
+        #
+        # # return the serialized data of the new review object
+        # serializer = ReviewSerializer(review)
+        # return Response(serializer.data)
+        #
+
